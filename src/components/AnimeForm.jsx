@@ -103,14 +103,14 @@ export default function AnimeForm({ onAdd, onEdit, editAnime, isEditMode }) {
           textColor={theme.textColor}
           borderColor={theme.borderColor}
           shadow={theme.borderColor}
-          className="px-8 py-3 text-base uppercase tracking-wide font-black border-2"
+          className="px-4 sm:px-8 py-2 sm:py-3 text-sm sm:text-base uppercase tracking-wide font-black border-2"
         >
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex items-center gap-2"
           >
-            <span>➕</span> Add Anime
+            <span>➕</span> <span className="hidden xs:inline">Add</span> Anime
           </motion.span>
         </Button>
       </motion.div>

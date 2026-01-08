@@ -132,7 +132,7 @@ function App() {
 
       {/* Main Terminal Container */}
       <motion.div 
-        className="max-w-6xl mx-auto px-4 py-8"
+        className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -148,27 +148,27 @@ function App() {
             textColor={theme.textColor}
             borderColor={theme.borderColor}
             shadowColor={undefined}
-            className="p-6 border-2"
+            className="p-3 sm:p-6 border-2"
             style={{
               borderWidth: '2px',
             }}
           >
             {/* Header */}
             <motion.header 
-              className="mb-8 border-2 p-4" 
+              className="mb-6 sm:mb-8 border-2 p-3 sm:p-4" 
               style={{ borderColor: theme.borderColor }}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <div className="flex items-center justify-between mb-3 flex-wrap gap-4">
+              <div className="flex items-center justify-between mb-3 flex-wrap gap-3 sm:gap-4">
                 <motion.div
                   initial={{ x: -50, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
                   <h1 
-                    className="text-4xl font-black uppercase tracking-wide mb-2 flex items-center gap-3"
+                    className="text-2xl sm:text-4xl font-black uppercase tracking-wide mb-2 flex items-center gap-2 sm:gap-3"
                     style={{ color: theme.textColor }}
                   >
                     <motion.span
@@ -205,7 +205,7 @@ function App() {
             >
               {/* Add Anime Button */}
               <motion.div 
-                className="mb-6 flex justify-center"
+                className="mb-4 sm:mb-6 flex justify-center"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
