@@ -6,17 +6,8 @@ export function useAnimeSync() {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
 
-  // Get device ID (creates one if it doesn't exist)
-  const getDeviceId = () => {
-    let deviceId = localStorage.getItem('deviceId');
-    if (!deviceId) {
-      deviceId = 'device_' + Math.random().toString(36).substring(2, 15);
-      localStorage.setItem('deviceId', deviceId);
-    }
-    return deviceId;
-  };
-
-  const deviceId = getDeviceId();
+  // Use a fixed workspace ID so all devices share the same list
+  const workspaceId = 'my_anime_list';
 
   // Load animes from Supabase
   const loadAnimes = async () => {
@@ -25,7 +16,7 @@ export function useAnimeSync() {
       const { data, error } = await supabase
         .from('animes')
         .select('*')
-        .eq('device_id', deviceId)
+        .eq('device_id', workspaceId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -69,7 +60,7 @@ export function useAnimeSync() {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) thworkspaerror;
 
       if (data) {
         const formattedAnime = {
