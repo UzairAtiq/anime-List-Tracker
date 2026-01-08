@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getRandomEmoji } from './data/emojiList';
 import { Card } from 'pixel-retroui';
@@ -6,58 +6,40 @@ import { useTheme } from './context/ThemeContext';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import AnimeForm from './components/AnimeForm';
 import AnimeList from './components/AnimeList';
-
-const STORAGE_KEY = 'animeList';
+import { useAnimeSync } from './hooks/useAnimeSync';
 
 function App() {
   const { theme } = useTheme();
-  const [animes, setAnimes] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const { animes, loading, syncing, addAnime, updateAnime, deleteAnime } = useAnimeSync();
   const [notification, setNotification] = useState(null);
-
-  // Save to localStorage whenever animes change
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(animes));
-  }, [animes]);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleAddAnime = (animeData) => {
+  const handleAddAnime = async (animeData) => {
     const newAnime = {
-      id: Date.now().toString(),
-      name: animeData.name,
-      totalEpisodes: animeData.totalEpisodes || 0,
-      watchedEpisodes: animeData.watchedEpisodes || 0,
-      completed: animeData.completed || false,
+      ...animeData,
       emoji: getRandomEmoji(),
     };
-    setAnimes([...animes, newAnime]);
+    await addAnime(newAnime);
     showNotification(`Added "${animeData.name}"!`, 'success');
   };
 
-  const handleToggleComplete = (id) => {
-    setAnimes(
-      animes.map((anime) =>
-        anime.id === id
-          ? { ...anime, completed: !anime.completed }
-          : anime
-      )
-    );
+  const handleToggleComplete = async (id) => {
     const anime = animes.find(a => a.id === id);
+    const newCompleted = !anime.completed;
+    await updateAnime(id, { completed: newCompleted });
     showNotification(
-      anime?.completed ? `Marked "${anime.name}" as incomplete` : `Completed "${anime?.name}"! 🎉`,
+      newCompleted ? `Completed "${anime?.name}"! 🎉` : `Marked "${anime.name}" as incomplete`,
       'info'
     );
   };
 
-  const handleDeleteAnime = (id) => {
+  const handleDeleteAnime = async (id) => {
     const anime = animes.find(a => a.id === id);
-    setAnimes(animes.filter((anime) => anime.id !== id));
+    await deleteAnime(id);
     showNotification(`Deleted "${anime?.name}"`, 'error');
   };
 
@@ -92,6 +74,54 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Syncing Indicator */}
+      <AnimatePresence>
+        {syncing && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed bottom-4 right-4 z-50 border-2 px-4 py-2 flex items-center gap-2"
+            style={{
+              backgroundColor: theme.bg,
+              borderColor: theme.borderColor,
+              color: theme.textColor,
+            }}
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="text-xl"
+            >
+              ⚡
+            </motion.div>
+            <span className="font-black uppercase tracking-wide text-xs">Syncing...</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Loading Screen */}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: theme.bg }}>
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <motion.div
+              className="text-6xl mb-4"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            >
+              📺
+            </motion.div>
+            <p className="font-black uppercase tracking-wide text-xl" style={{ color: theme.textColor }}>
+              Loading your anime...
+            </p>
+          </motion.div>
+        </div>
+      )}
 
       {/* Main Terminal Container */}
       <motion.div 
