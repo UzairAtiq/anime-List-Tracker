@@ -55,7 +55,7 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
             backgroundColor: theme.bg,
           }}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-col sm:flex-row">
             <motion.div 
               className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-2xl border-2"
               style={{
@@ -69,16 +69,16 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
               {anime.emoji}
             </motion.div>
 
-            <div className="flex-1 min-w-0 font-mono">
-              <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex-1 min-w-0 font-mono w-full">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <motion.div 
-                  className="flex-1 min-w-[200px]"
+                  className="w-full sm:flex-1 sm:min-w-[200px]"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
                 >
                   <span 
-                    className="text-lg font-black uppercase tracking-wide"
+                    className="text-base sm:text-lg font-black uppercase tracking-wide break-words"
                     style={{ color: theme.textColor }}
                   >
                     {anime.name}
@@ -86,7 +86,7 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
                 </motion.div>
 
                 <motion.div 
-                  className="flex items-center gap-6 flex-wrap"
+                  className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 w-full sm:w-auto"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
@@ -111,10 +111,10 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
                   )}
 
                   {!anime.completed && anime.totalEpisodes > 0 && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
                       <span className="text-xs font-black" style={{ color: theme.textColor }}>[</span>
                       <div 
-                        className="w-24 h-3 overflow-hidden border-2"
+                        className="flex-1 sm:w-24 h-3 overflow-hidden border-2"
                         style={{
                           backgroundColor: theme.bg,
                           borderColor: theme.borderColor,
@@ -147,7 +147,7 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
                   <div className="flex items-center gap-2">
                     <motion.button
                       onClick={() => onToggleComplete(anime.id)}
-                      className="w-8 h-8 flex items-center justify-center transition-all border-2"
+                      className="w-8 h-8 sm:w-8 sm:h-8 flex items-center justify-center transition-all border-2 flex-shrink-0"
                       style={{
                         backgroundColor: anime.completed ? theme.borderColor : theme.bg,
                         color: anime.completed ? theme.bg : theme.textColor,
@@ -180,7 +180,7 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
                         textColor={theme.textColor}
                         borderColor={theme.borderColor}
                         shadow={theme.borderColor}
-                        className="px-3 py-1 text-xs uppercase font-black border-2"
+                        className="px-2 sm:px-3 py-1 text-xs uppercase font-black border-2 whitespace-nowrap"
                       >
                         Edit
                       </Button>
@@ -196,9 +196,9 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit })
                         textColor={showDeleteConfirm ? '#ff0000' : theme.textColor}
                         borderColor={showDeleteConfirm ? '#ff0000' : theme.borderColor}
                         shadow={showDeleteConfirm ? '#ff0000' : theme.borderColor}
-                        className="px-3 py-1 text-xs uppercase font-black border-2"
+                        className="px-2 sm:px-3 py-1 text-xs uppercase font-black border-2 whitespace-nowrap"
                       >
-                        {showDeleteConfirm ? '⚠ Confirm' : 'Delete'}
+                        {showDeleteConfirm ? '⚠ Yes' : 'Delete'}
                       </Button>
                     </motion.div>
                   </div>
