@@ -51,7 +51,7 @@ export function useAnimeSync() {
         watched_episodes: animeData.watchedEpisodes || 0,
         completed: animeData.completed || false,
         emoji: animeData.emoji,
-        device_id: deviceId,
+        device_id: workspaceId,
       };
 
       const { data, error } = await supabase
@@ -60,7 +60,7 @@ export function useAnimeSync() {
         .select()
         .single();
 
-      if (error) thworkspaerror;
+      if (error) throw error;
 
       if (data) {
         const formattedAnime = {
