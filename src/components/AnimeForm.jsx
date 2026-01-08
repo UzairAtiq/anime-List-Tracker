@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Input, Popup } from 'pixel-retroui';
 import { useTheme } from '../context/ThemeContext';
 
-export default function AnimeForm({ onAdd }) {
+export default function AnimeForm({ onAdd, onEdit, editAnime, isEditMode }) {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,6 +14,18 @@ export default function AnimeForm({ onAdd }) {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isEditMode && editAnime) {
+      setFormData({
+        name: editAnime.name,
+        totalEpisodes: editAnime.totalEpisodes.toString(),
+        watchedEpisodes: editAnime.watchedEpisodes.toString(),
+        completed: editAnime.completed,
+      });
+      setIsOpen(true);
+    }
+  }, [isEditMode, editAnime]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -44,12 +56,18 @@ export default function AnimeForm({ onAdd }) {
     // Simulate async operation for smooth animation
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    onAdd({
+    const animeData = {
       name: formData.name.trim(),
       totalEpisodes: parseInt(formData.totalEpisodes) || 0,
       watchedEpisodes: parseInt(formData.watchedEpisodes) || 0,
       completed: formData.completed,
-    });
+    };
+
+    if (isEditMode && editAnime) {
+      onEdit(editAnime.id, animeData);
+    } else {
+      onAdd(animeData);
+    }
 
     setFormData({
       name: '',
@@ -319,7 +337,7 @@ export default function AnimeForm({ onAdd }) {
                   animate={isSubmitting ? { opacity: [1, 0.5, 1] } : { opacity: 1 }}
                   transition={{ repeat: isSubmitting ? Infinity : 0, duration: 1 }}
                 >
-                  {isSubmitting ? 'Adding...' : 'Add'}
+                  {isSubmitting ? (isEditMode ? 'Saving...' : 'Adding...') : (isEditMode ? 'Save' : 'Add')}
                 </motion.span>
               </Button>
             </motion.div>

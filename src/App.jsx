@@ -12,6 +12,7 @@ function App() {
   const { theme } = useTheme();
   const { animes, loading, syncing, addAnime, updateAnime, deleteAnime } = useAnimeSync();
   const [notification, setNotification] = useState(null);
+  const [editingAnime, setEditingAnime] = useState(null);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -25,6 +26,12 @@ function App() {
     };
     await addAnime(newAnime);
     showNotification(`Added "${animeData.name}"!`, 'success');
+  };
+
+  const handleEditAnime = async (id, animeData) => {
+    await updateAnime(id, animeData);
+    setEditingAnime(null);
+    showNotification(`Updated "${animeData.name}"!`, 'success');
   };
 
   const handleToggleComplete = async (id) => {
@@ -203,7 +210,12 @@ function App() {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
               >
-                <AnimeForm onAdd={handleAddAnime} />
+                <AnimeForm 
+                  onAdd={handleAddAnime} 
+                  onEdit={handleEditAnime}
+                  editAnime={editingAnime}
+                  isEditMode={!!editingAnime}
+                />
               </motion.div>
 
               {/* Anime List */}
@@ -216,6 +228,7 @@ function App() {
                   animes={animes}
                   onToggleComplete={handleToggleComplete}
                   onDelete={handleDeleteAnime}
+                  onEdit={setEditingAnime}
                 />
               </motion.div>
             </motion.main>

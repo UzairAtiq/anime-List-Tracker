@@ -4,11 +4,10 @@ import { Input } from 'pixel-retroui';
 import { useTheme } from '../context/ThemeContext';
 import AnimeCard from './AnimeCard';
 
-export default function AnimeList({ animes, onToggleComplete, onDelete }) {
+export default function AnimeList({ animes, onToggleComplete, onDelete, onEdit }) {
   const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Filter animes based on search query
   const filteredAnimes = animes.filter((anime) =>
     anime.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -66,7 +65,6 @@ export default function AnimeList({ animes, onToggleComplete, onDelete }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {/* Search Input - Retro Terminal Style */}
       <div className="mb-6">
         <label 
           className="block text-sm uppercase tracking-wide mb-2 font-black"
@@ -84,21 +82,19 @@ export default function AnimeList({ animes, onToggleComplete, onDelete }) {
           borderColor={theme.borderColor}
           className="w-full px-4 py-3 uppercase tracking-wide font-mono text-sm border-2 font-black"
         />
-      </motion.div>
+      </div>
 
-      {/* Results Count */}
-      {searchQuery && (
+      {searchQuery ? (
         <motion.div 
-        Name="mb-4 text-xs uppercase tracking-wide font-black opacity-80"
+          className="mb-4 text-xs uppercase tracking-wide font-black opacity-80"
           style={{ color: theme.textColor }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 0.8, y: 0 }}
         >
           Results: {filteredAnimes.length} / {animes.length}
         </motion.div>
-      )}
+      ) : null}
 
-      {/* Divider */}
       <motion.div 
         className="mb-4 h-px border-t-2"
         style={{ borderColor: theme.borderColor }}
@@ -107,7 +103,6 @@ export default function AnimeList({ animes, onToggleComplete, onDelete }) {
         transition={{ delay: 0.2, duration: 0.3 }}
       />
 
-      {/* Anime List */}
       {filteredAnimes.length === 0 ? (
         <motion.div 
           className="text-center py-12"
@@ -143,12 +138,14 @@ export default function AnimeList({ animes, onToggleComplete, onDelete }) {
                 key={anime.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.05 }}
               >
                 <AnimeCard
                   anime={anime}
                   onToggleComplete={onToggleComplete}
                   onDelete={onDelete}
+                  onEdit={onEdit}
                 />
               </motion.div>
             ))}

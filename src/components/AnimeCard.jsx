@@ -3,7 +3,7 @@ import { Card, Button } from 'pixel-retroui';
 import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 
-export default function AnimeCard({ anime, onToggleComplete, onDelete }) {
+export default function AnimeCard({ anime, onToggleComplete, onDelete, onEdit }) {
   const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -169,6 +169,22 @@ export default function AnimeCard({ anime, onToggleComplete, onDelete }) {
                         </motion.span>
                       )}
                     </motion.button>
+
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Button
+                        onClick={() => onEdit(anime)}
+                        bg={theme.bg}
+                        textColor={theme.textColor}
+                        borderColor={theme.borderColor}
+                        shadow={theme.borderColor}
+                        className="px-3 py-1 text-xs uppercase font-black border-2"
+                      >
+                        Edit
+                      </Button>
+                    </motion.div>
 
                     <motion.div
                       whileHover={{ scale: 1.05 }}
