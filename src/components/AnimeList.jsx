@@ -67,12 +67,7 @@ export default function AnimeList({ animes, onToggleComplete, onDelete }) {
       transition={{ duration: 0.4 }}
     >
       {/* Search Input - Retro Terminal Style */}
-      <motion.div 
-        className="mb-6"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.1 }}
-      >
+      <div className="mb-6">
         <label 
           className="block text-sm uppercase tracking-wide mb-2 font-black"
           style={{ color: theme.textColor }}
@@ -94,7 +89,7 @@ export default function AnimeList({ animes, onToggleComplete, onDelete }) {
       {/* Results Count */}
       {searchQuery && (
         <motion.div 
-          className="mb-4 text-xs uppercase tracking-wide font-black opacity-80"
+        Name="mb-4 text-xs uppercase tracking-wide font-black opacity-80"
           style={{ color: theme.textColor }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 0.8, y: 0 }}
